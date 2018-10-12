@@ -1,0 +1,23 @@
+# From https://github.com/github/gitignore/blob/master/Python.gitignore<Paste>
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# PyCharm
+.idea/
+
+# mac
+.DS_Store
+
+# venv
+.venv/
