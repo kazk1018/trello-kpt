@@ -1,8 +1,7 @@
 from trello import TrelloClient
-from api.config import Config
 
 
-def new_client(c: Config):
+def new_client(c):
     client = TrelloClient(api_key=c.api_key,
                           api_secret=c.api_secret,
                           token=c.token,
