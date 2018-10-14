@@ -1,4 +1,5 @@
 import click
+import os
 
 
 def board_repr(b):
@@ -43,3 +44,42 @@ def board_list(ctx):
     client = ctx.obj['client']
     for b in client.list_boards():
         click.echo(board_repr(b))
+
+
+@board.command('report')
+@click.argument('board_id')
+@click.argument('output')
+@click.pass_context
+def board_report(ctx, board_id, output):
+    _, ext = os.path.splitext(output)
+    if ext != '.md':
+        click.echo('output must be markdown (.md) file.')
+
+    else:
+        client = ctx.obj['client']
+        b = client.get_board(board_id)
+
+        f = open(output, 'w')
+
+        # Title
+        f.write('# {}\n'.format(b.name))
+
+        for l in b.get_lists('open'):
+            # Lists
+            f.write('## {}\n'.format(l.name))
+
+            # Cards
+            for card in l.list_cards():
+                f.write('### {}\n'.format(card.name))
+
+                # Comments
+                for comment in card.get_comments():
+                    f.write('- {}\n'.format(comment['data']['text']))
+
+                f.write('\n')
+
+            f.write('\n')
+
+        f.close()
+
+
