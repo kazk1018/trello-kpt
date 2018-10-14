@@ -12,4 +12,4 @@ def organization(ctx):
 def organization_list(ctx):
     client = ctx.obj['client']
     for b in client.list_organizations():
-        print(b.name, b.id)
+        click.echo('{}: {}'.format(b.name, b.id))

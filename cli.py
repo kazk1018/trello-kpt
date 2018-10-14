@@ -1,7 +1,7 @@
 import click
 
 from api import Config, new_client
-from commands import board, config, organization
+from commands import board, config, organization, lists
 
 
 @click.group()
@@ -18,6 +18,7 @@ def cli(ctx):
 # commands
 cli.add_command(board)
 cli.add_command(config)
+cli.add_command(lists)
 cli.add_command(organization)
 
 
