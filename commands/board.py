@@ -46,6 +46,16 @@ def board_list(ctx):
         click.echo(board_repr(b))
 
 
+@board.command('search')
+@click.argument('name')
+@click.pass_context
+def board_search(ctx, name):
+    client = ctx.obj['client']
+    for b in client.list_boards():
+        if name in b.name:
+            click.echo(board_repr(b))
+
+
 @board.command('report')
 @click.argument('board_id')
 @click.argument('output')
