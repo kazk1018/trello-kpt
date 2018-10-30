@@ -1,4 +1,16 @@
 import click
+import json
+
+
+def list_repr(lists):
+    bs = []
+    if type(lists) == list:
+        for b in lists:
+            bs.append({'id': b.id, 'name': b.name})
+    else:
+        bs.append({'id': lists.id, 'name': lists.name})
+
+    return json.dumps({"lists": bs})
 
 
 @click.group('lists')
@@ -14,9 +26,11 @@ def lists(ctx):
 def list_add(ctx, board_id, ls):
     client = ctx.obj['client']
     b = client.get_board(board_id)
+    ls = []
     for l in ls.split(',')[::-1]:
         rtn = b.add_list(l)
-        click.echo('{}: {}'.format(rtn.name, rtn.id))
+        ls.append(rtn)
+    click.echo(list_repr(ls))
 
 
 @lists.command('get')
@@ -25,6 +39,7 @@ def list_add(ctx, board_id, ls):
 def board_get(ctx, board_id):
     client = ctx.obj['client']
     b = client.get_board(board_id)
-    ls = b.all_lists()
-    for l in ls:
-        click.echo('{}: {}'.format(l.name, l.id))
+    ls = []
+    for l in b.all_lists():
+        ls.append(l)
+    click.echo(list_repr(ls))

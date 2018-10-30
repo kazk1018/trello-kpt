@@ -1,9 +1,17 @@
 import click
+import json
 import os
 
 
-def board_repr(b):
-    return '{}: {} ({})'.format(b.id, b.name, b.url)
+def board_repr(boards):
+    bs = []
+    if type(boards) == list:
+        for b in boards:
+            bs.append({'id': b.id, 'name': b.name, 'url': b.url})
+    else:
+        bs.append({'id': boards.id, 'name': boards.name, 'url': boards.url})
+
+    return json.dumps({"boards": bs})
 
 
 @click.group('board')
@@ -42,8 +50,11 @@ def board_get(ctx, board_id):
 @click.pass_context
 def board_list(ctx):
     client = ctx.obj['client']
+    bs = []
     for b in client.list_boards():
-        click.echo(board_repr(b))
+        bs.append(b)
+
+    click.echo(board_repr(bs))
 
 
 @board.command('search')
@@ -51,9 +62,12 @@ def board_list(ctx):
 @click.pass_context
 def board_search(ctx, name):
     client = ctx.obj['client']
+    bs = []
     for b in client.list_boards():
         if name in b.name:
-            click.echo(board_repr(b))
+            bs.append(b)
+
+    click.echo(board_repr(bs))
 
 
 @board.command('report')
