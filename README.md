@@ -2,6 +2,14 @@
 
 KPT tool CLI for Trello
 
+## Installation
+
+* This installation requires latest setuptools
+
+```
+pip install git+https://github.com/kazk1018/trello-kpt
+```
+
 ## Requirements
 * python 3.6
 * libraries
@@ -57,3 +65,4 @@ python cli.py board report {your board id} {mardown file path}
 ## TODO
 * setup.py (install)
 * other commands
+
