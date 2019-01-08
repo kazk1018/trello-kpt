@@ -11,8 +11,13 @@ def cli(ctx):
     ctx.ensure_object(dict)
 
     # add client to context
-    client = new_client(Config.read_from_yaml())
-    ctx.obj['client'] = client
+    config = Config.read_from_yaml()
+
+    if config is None:
+        ctx.obj['client'] = None
+    else: 
+        client = new_client(config)
+        ctx.obj['client'] = client
 
 
 # commands

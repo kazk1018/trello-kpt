@@ -16,7 +16,11 @@ def list_repr(lists):
 @click.group('lists')
 @click.pass_context
 def lists(ctx):
-    pass
+    client = ctx.obj['client']
+
+    if client is None:
+        click.echo('please run `config new` command first.')
+        raise click.Abort()
 
 
 @lists.command('add')

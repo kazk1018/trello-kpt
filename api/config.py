@@ -15,6 +15,9 @@ class Config:
 
     @staticmethod
     def read_from_yaml(file_path=DEFAULT_CONFIG_PATH):
+        if not os.path.exists(file_path):
+            return None
+
         with open(file_path, 'r') as f:
             data = yaml.load(f)
 

@@ -17,7 +17,11 @@ def board_repr(boards):
 @click.group('board')
 @click.pass_context
 def board(ctx):
-    pass
+    client = ctx.obj['client']
+
+    if client is None:
+        click.echo('please run `config new` command first.')
+        raise click.Abort()
 
 
 @board.command('new')

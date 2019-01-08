@@ -16,7 +16,11 @@ def organization_repr(organizations):
 @click.group('organization')
 @click.pass_context
 def organization(ctx):
-    pass
+    client = ctx.obj['client']
+
+    if client is None:
+        click.echo('please run `config new` command first.')
+        raise click.Abort()
 
 
 @organization.command('list')
