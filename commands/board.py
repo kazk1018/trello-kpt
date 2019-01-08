@@ -1,6 +1,7 @@
 import click
 import json
 import os
+import sys
 
 
 def board_repr(boards):
@@ -76,38 +77,39 @@ def board_search(ctx, name):
 
 @board.command('report')
 @click.argument('board_id')
-@click.argument('output')
+@click.argument('output', required=False, default=None)
 @click.pass_context
 def board_report(ctx, board_id, output):
-    _, ext = os.path.splitext(output)
-    if ext != '.md':
-        click.echo('output must be markdown (.md) file.')
+    if output is not None:
+        _, ext = os.path.splitext(output)
+        if ext != '.md':
+            click.echo('output must be markdown (.md) file.')
+            raise click.Abort()
 
-    else:
-        client = ctx.obj['client']
-        b = client.get_board(board_id)
+    client = ctx.obj['client']
+    b = client.get_board(board_id)
 
-        f = open(output, 'w')
+    f = open(output, 'w') if output is not None else sys.stdout
 
-        # Title
-        f.write('# {}\n'.format(b.name))
+    # Title
+    f.write('# {}\n'.format(b.name))
 
-        for l in b.get_lists('open'):
-            # Lists
-            f.write('## {}\n'.format(l.name))
+    for l in b.get_lists('open'):
+        # Lists
+        f.write('## {}\n'.format(l.name))
 
-            # Cards
-            for card in l.list_cards():
-                f.write('### {}\n'.format(card.name))
+        # Cards
+        for card in l.list_cards():
+            f.write('### {}\n'.format(card.name))
 
-                # Comments
-                for comment in card.get_comments():
-                    f.write('- {}\n'.format(comment['data']['text']))
-
-                f.write('\n')
+            # Comments
+            for comment in card.get_comments():
+                f.write('- {}\n'.format(comment['data']['text']))
 
             f.write('\n')
 
-        f.close()
+        f.write('\n')
+
+    f.close()
 
 
